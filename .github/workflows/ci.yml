@@ -48,6 +48,9 @@ jobs:
           cur_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4000/ || echo "failed")
           echo "Server status: $cur_status"
 
+      - name: Prep directory for ZAP artifact
+        run: chmod 777 .
+
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.12.0
         with:
