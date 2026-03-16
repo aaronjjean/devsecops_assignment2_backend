@@ -534,10 +534,11 @@ def grade_student():
 
 
 # Vulnerability for SonarQube: Hardcoded credentials
-def get_db_credentials():
+def connect_to_database():
     username = "admin"
-    password = "SuperSecretPassword123!"
-    return username, password
+    password = "SuperSecretPassword123!" # Noncompliant: hardcoded password
+    connection_string = f"mysql://{username}:{password}@localhost/db"
+    return connection_string
 
 # Vulnerability for ZAP: Reflected XSS
 @app.route('/api/search', methods=['GET'])
