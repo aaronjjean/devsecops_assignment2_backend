@@ -106,8 +106,12 @@ def is_course_teacher(course_id: int, teacher_id: int) -> bool:
 
 @app.route('/', methods=['GET'])
 def first():
-
-    return jsonify({'message': 'Backend flask app running'}), 200
+    # Vulnerability for ZAP Passive Scan: Insecure Cookies
+    # Setting a sensitive session cookie without 'Secure' or 'HttpOnly' flags
+    response_body = {'message': 'Backend flask app running', 'vulnerability': 'insecure_cookie_test'}
+    return jsonify(response_body), 200, {
+        'Set-Cookie': 'auth_session_token=super_secret_fake_token_12345; Path=/'
+    }
 
 
 @app.route('/api', methods=['GET'])
@@ -536,10 +540,7 @@ def grade_student():
 # Vulnerability for SonarQube: Hardcoded Database Credentials (RSPEC-2068)
 import sqlite3
 def connect_to_database():
-    # SonarQube detects passwords explicitly passed as hardcoded strings 
-    # to connection functions or common variable names depending on the sink.
     db_conn = sqlite3.connect("my_database.db")
-    # Using a literal password assignment that SonarQube flags
     app.config['DB_PASSWORD'] = "P@ssw0rd123!_Hardcoded"
     return db_conn
 
