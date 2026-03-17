@@ -38,6 +38,15 @@ jobs:
           args: --skip-unresolved
         continue-on-error: true
 
+      - name: Monitor project in Snyk (push to dashboard)
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+          args: --skip-unresolved
+        continue-on-error: true
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
