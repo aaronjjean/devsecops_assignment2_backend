@@ -533,11 +533,15 @@ def grade_student():
         return jsonify({'message': 'Error submitting grade'}), 500
 
 
-# Vulnerability for SonarQube: Hardcoded AWS Credentials
-def get_aws_client():
-    aws_access_key_id = "AKIAIOSFODNN7EXAMPLE" # Noncompliant: Hardcoded AWS Access Key
-    aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" # Noncompliant: Hardcoded AWS Secret Key
-    return aws_access_key_id, aws_secret_access_key
+# Vulnerability for SonarQube: Hardcoded Database Credentials (RSPEC-2068)
+import sqlite3
+def connect_to_database():
+    # SonarQube detects passwords explicitly passed as hardcoded strings 
+    # to connection functions or common variable names depending on the sink.
+    db_conn = sqlite3.connect("my_database.db")
+    # Using a literal password assignment that SonarQube flags
+    app.config['DB_PASSWORD'] = "P@ssw0rd123!_Hardcoded"
+    return db_conn
 
 # Vulnerability for ZAP: Reflected XSS
 @app.route('/api/search', methods=['GET'])
