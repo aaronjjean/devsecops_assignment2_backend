@@ -533,12 +533,11 @@ def grade_student():
         return jsonify({'message': 'Error submitting grade'}), 500
 
 
-# Vulnerability for SonarQube: Hardcoded credentials
-def connect_to_database():
-    username = "admin"
-    password = "SuperSecretPassword123!" # Noncompliant: hardcoded password
-    connection_string = f"mysql://{username}:{password}@localhost/db"
-    return connection_string
+# Vulnerability for SonarQube: Hardcoded AWS Credentials
+def get_aws_client():
+    aws_access_key_id = "AKIAIOSFODNN7EXAMPLE" # Noncompliant: Hardcoded AWS Access Key
+    aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" # Noncompliant: Hardcoded AWS Secret Key
+    return aws_access_key_id, aws_secret_access_key
 
 # Vulnerability for ZAP: Reflected XSS
 @app.route('/api/search', methods=['GET'])
